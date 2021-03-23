@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>카페 음료 검색하기</title>
+  <link rel="stylesheet" href="./style.css">
+</head>
+
+<body>
+  <div id="app">
+    <header>
+      <h2 class="container">메뉴 검색</h2>
+    </header>
+
+    <!-- 메뉴 입력폼과 검색 결과 화면-->
+    <div id="Search" class="container"> <!-- Search -->
+      <form>
+        <!-- input 이벤트 발생하면 Input 실행 / 엔터키 누르면 Search 실행 -->
+        <input v-on:input="Input" v-on:keydown.enter.prevent="Search" type="text" v-model="drink" placeholder="드실 음료를 검색하세요" autofocus> 
+        <!-- reset 버튼 / 클릭하면 resetInput 실행 / v-show=true 일 때 화면에 나타남 -->
+        <button type="reset" class="btn-reset" v-show="resetBtn" v-on:click="resetInput"></button>
+      </form>
+      <!-- searchItems에 있는 data만큼 반복 / v-show=true 일 때 화면에 나타남 -->
+      <div v-for="item in searchItems" id="search-result" v-show="rShow"> 
+        <img :src="item.image"></img> <!-- 검색 결과 image -->
+        <li>{{ item.name }}</li>  <!-- 검색 결과 name -->
+      </div>
+    </div>
+
+    <!-- 커피, 음료 메뉴 탭과 목록 -->
+    <div id="Menu" class="container" v-show="mShow">  <!-- Menu / v-show=true 일 때 화면에 나타남 -->
+      <!-- Tab / show-coffee, show-bvrg 이벤트가 들어오면 showCoffee, showBvrg 실행-->
+      <cafe-menu v-on:show-coffee="showCoffee" v-on:show-bvrg="showBvrg"></cafe-menu>
+      <ul class="list" id="c_list" v-show="ok"> <!-- 커피 메뉴 목록 -->
+        <li v-for="(item, index) in coffeeItems"> <!-- coffeeItems에 있는 data만큼 반복 -->
+          <span class="number"> {{ index+1 }} </span> <!-- 커피 메뉴 index -->
+          <span v-on:click="clickMenu(item)"> {{ item.name }} </span>  <!-- 커피 메뉴 name / 클릭하면 clickMenu(item) 실행 -->
+        </li>
+      </ul>
+      <ul class="list" id="b_list" v-show="!ok">  <!-- 음료 메뉴 목록 / v-show=true 일 때 화면에 나타남 -->
+        <li v-for="(item, index) in bvrgItems" >  <!-- bvrgItems에 있는 data만큼 반복 -->
+          <span v-on:click="clickMenu(item)"> {{ item.name }} </span> <!-- 음료 메뉴 name / 클릭하면 clickMenu(item) 실행 -->
+          <span class="price"> {{ item.price }} </span> <!-- 음료 메뉴 price -->
+          <button v-on:click="remove(item, index)" type="reset" class="btn-remove"></button> <!-- 삭제 버튼 / 클릭하면 remove(item, index) 실행 -->
+        </li>
+      </ul>
+    </div>
+  </div>
+<script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+<script type="module" src="./js/app.js"></script>
+</body>
+
+</html>
